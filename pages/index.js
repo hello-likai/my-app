@@ -15,7 +15,8 @@ export default function Home() {
   // numberOfWhitelisted tracks the number of addresses's whitelisted
   const [numberOfWhitelisted, setNumberOfWhitelisted] = useState(0);
   // Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
-  const web3ModalRef = useRef();
+  const web3ModalRef = useRef(); 
+  // 这里只是用 这个钩子来定义这个变量，变量的值在下面的另外一个钩子里面赋值的
 
   /**
    * Returns a Provider or Signer object representing the Ethereum RPC with or without the
@@ -33,6 +34,7 @@ export default function Home() {
     // Connect to Metamask
     // Since we store `web3Modal` as a reference, we need to access the `current` value to get access to the underlying object
     const provider = await web3ModalRef.current.connect();
+    // providers是 etheres.js里面的 组件
     const web3Provider = new providers.Web3Provider(provider);
 
     // If user is not connected to the Rinkeby network, let them know and throw an error
@@ -134,10 +136,10 @@ export default function Home() {
       // Get the provider from web3Modal, which in our case is MetaMask
       // When used for the first time, it prompts the user to connect their wallet
       await getProviderOrSigner();
-      setWalletConnected(true);
+      setWalletConnected(true); // 设置钱包连接标识为true；
 
-      checkIfAddressInWhitelist();
-      getNumberOfWhitelisted();
+      checkIfAddressInWhitelist(); //检查是否在白名单中
+      getNumberOfWhitelisted(); // 检查白名单已经多少人了
     } catch (err) {
       console.error(err);
     }
@@ -175,6 +177,8 @@ export default function Home() {
   // useEffects are used to react to changes in state of the website
   // The array at the end of function call represents what state changes will trigger this effect
   // In this case, whenever the value of `walletConnected` changes - this effect will be called
+  // 相当于是一个钩子函数，第二个参数传递了walletConnected，所以这个钩子只关联这个变量
+  // 只要这个变量发生变化，就会触发useEffect这个钩子
   useEffect(() => {
     // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
     if (!walletConnected) {
